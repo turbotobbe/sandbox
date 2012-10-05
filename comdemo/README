@@ -1,0 +1,97 @@
+Project.
+--------
+This project aims to demonstrate how to utilize multi and unicast in Java.
+It consist of two applications, one server and one client. The demo will also
+exemplify some thread safety issues. This project will NOT demonstrate how to
+communicate over TCP since both Multi and unicast use the UDP protocol.
+In contrast to TCP, UDP does not guaranty that packages send will arrive at
+all or in the same order as they where sent. The upside of this is that clients
+do not have to wait on the server to acknowledge back to the client that the
+package has been received. This also makes it possible to build single threaded
+servers easily. When building TCP based servers, one typically uses a listening
+socket, accepts client connections and spawns one dedicated thread for every
+client. The goal of the project is not to create a complete or failsafe
+solution, so be aware that the programs may behave strange. Specifically, some
+error handling code and sanity checking code has been omitted. Instead, the aim
+has been to write reading friendly code that should be somewhat easy to follow.
+
+Tips.
+-----
+To find a multicast IP on windows you can run the following command:
+netsh interface ip show joins
+For Linux users, use ifconfig :)
+
+Build.
+------
+To build the server and client, simply follow these instructions:
+1. install java and maven.
+2. Download the demo source.
+3. Navigate to the source root.
+4. Run the command mvn clean install
+5. Unpack the distribution .zip or .tar.gz
+6. The root of the unpacked folder will be referred to as DEMO_HOME
+
+The Client.
+-----------
+Start a client by running the following command:
+DEMO_ROOT/bin/client <multi-group> <multi-port> <uni-port> <uni-host> <ack> <id>
+
+Where:
+<multi-group> is the multicast IP.
+<multi-port> is the multicast port.
+<uni-port> is the unicast port.
+<uni-host> is the unicast IP. i.e. the IP of the server.
+<ack> is a boolean flag indicating if the client should receive ack messages
+from the server in the unicast communication case.
+<id> is the client identification name.
+
+The client will start two threads. One thread will handle the multicast
+communication, and one thread will handle the unicast communication.
+
+The unicast communication works like this.
+The client reads the file DEMO_ROOT/etc/msg.txt and sends every line in a
+message to the server in the form <id>:<msg>. If the client has been started
+with <ack> set to true, the client will then halt and wait to receive a message
+from the server. If the client has been started with <ack> set to false, the
+client will not wait for any message from the server, but instead just send the
+next line to the server. When all lines has been sent the thread will stop.
+
+The multicast communication works like this.
+The client will halt and wait for messages sent by the server on the format
+<count> indicating how many clients has been in touch with the server.
+
+All sent and received messages will be logged to a file in DEMO_ROOT/log/ with a
+filename that reflects the client arguments.
+For example DEMO_ROOT/log/client.224.0.0.1.4444.localhost.4445.log
+This will be done in a thread safe manner.
+
+The Server.
+-----------
+Start the server by running the following command:
+DEMO_ROOT/bin/server <multi-group> <multi-port> <uni-port> <ack>
+
+Where:
+<multi-group> is the multicast IP.
+<multi-port> is the multicast port.
+<uni-port> is the unicast port.
+<ack> is a boolean flag indicating if the server should send ack messages
+to the client in the unicast communication case.
+
+The server will also start two threads. One thread will handle the multicast
+communication, and one thread will handle the unicast communication.
+
+The unicast communication works like this.
+The server halts and wait for messages sent from the clients. If the server has
+been started with the <ack> flag set to true, the server will then calculate
+the hashcode of the received message and send it to the client. If the server
+has been started with the <ack> flag set to false, the server will skip the ack
+message and wait for the next message.
+
+The multicast communication works like this.
+The server keeps track of all the client ids sent in messages from the clients.
+When a new id is received, the sever broadcasts the total count of unique ids.
+
+All sent and received messages will be logged to a file in DEMO_ROOT/log/ with a
+filename that reflects the server arguments.
+For example DEMO_ROOT/log/server.224.0.0.1.4444.4445.log
+This will be done in a thread safe manner.
