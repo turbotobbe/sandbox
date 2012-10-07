@@ -1,0 +1,3 @@
+-v 
+url = http://localhost:8080/restblog-webapp/rest/foo
+--header "Accept: */*"

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified"
+  targetNamespace="http://www.lingonskogen.se/${project.artifactId}/${project.version}"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:tns="http://www.lingonskogen.se/${project.artifactId}/${project.version}"
+  xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+  xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" 
+  jaxb:extensionBindingPrefixes="xjc" jaxb:version="2.0">
+
+  <xs:annotation>
+    <xs:appinfo>
+      <jaxb:globalBindings fixedAttributeAsConstantProperty="true">
+        <xjc:serializable uid="1" />
+      </jaxb:globalBindings>
+    </xs:appinfo>
+  </xs:annotation>
+
+  <xs:complexType name="root-type" />
+  
+  <xs:complexType name="blog-type">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string" />
+      <xs:element name="content" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="blogs-type">
+    <xs:sequence>
+      <xs:element name="blog-type" type="tns:blog-type" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="post-type">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string" />
+      <xs:element name="content" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="posts-type">
+    <xs:sequence>
+      <xs:element name="post-type" type="tns:post-type" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

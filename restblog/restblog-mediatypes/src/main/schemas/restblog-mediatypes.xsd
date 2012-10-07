@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified"
+  targetNamespace="http://www.lingonskogen.se/${project.parent.artifactId}/${project.version}"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.lingonskogen.se/${project.parent.artifactId}/${project.version}"
+  xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+  jaxb:extensionBindingPrefixes="xjc" jaxb:version="1.0">
+
+  <xs:annotation>
+    <xs:appinfo>
+      <jaxb:globalBindings fixedAttributeAsConstantProperty="true">
+        <xjc:serializable uid="1" />
+      </jaxb:globalBindings>
+    </xs:appinfo>
+  </xs:annotation>
+
+  <xs:complexType name="media-types">
+  
+      <!-- version -->
+    <xs:attribute name="version" type="xs:string" fixed="${project.version}" />
+
+      <!-- generic types -->
+    <xs:attribute name="wild-wild" type="xs:string" fixed="*/*" />
+    <xs:attribute name="app-wild" type="xs:string" fixed="application/*" />
+    <xs:attribute name="app-xml" type="xs:string" fixed="application/xml" />
+      
+      <!-- generic version types -->
+    <xs:attribute name="wild-wild-version" type="xs:string" fixed="*/*; version=${project.version}" />
+    <xs:attribute name="app-wild-version" type="xs:string"
+      fixed="application/*; version=${project.version}" />
+    <xs:attribute name="app-xml-version" type="xs:string"
+      fixed="application/xml; version=${project.version}" />
+      
+      <!-- specific value types -->
+    <xs:attribute name="app-blog-xml" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.blog+xml" />
+    <xs:attribute name="app-post-xml" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.post+xml" />
+
+      <!-- specific value version types -->
+    <xs:attribute name="app-blog-xml-version" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.blog+xml; version=${project.version}" />
+    <xs:attribute name="app-post-xml-version" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.post+xml; version=${project.version}" />
+
+      <!-- specific presentation types -->
+      <!-- 
+      <xs:attribute name="app-verb-xml" type="xs:string" fixed="application/vnd.${project.parent.artifactId}.verb+xml" />
+      <xs:attribute name="app-link-xml" type="xs:string" fixed="application/vnd.${project.parent.artifactId}.link+xml" />
+       -->
+    <xs:attribute name="app-view-root-xml" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-root+xml" />
+    <xs:attribute name="app-view-blog-xml" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-blog+xml" />
+    <xs:attribute name="app-view-blogs-xml" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-blogs+xml" />
+    <xs:attribute name="app-view-post-xml" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-post+xml" />
+    <xs:attribute name="app-view-posts-xml" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-posts+xml" />
+
+      <!-- specific presentation version types -->
+    <xs:attribute name="app-verb-xml-version" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.verb+xml; version=${project.version}" />
+    <xs:attribute name="app-link-xml-version" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.link+xml; version=${project.version}" />
+    <xs:attribute name="app-view-root-xml-version" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-root+xml; version=${project.version}" />
+    <xs:attribute name="app-view-blog-xml-version" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-blog+xml; version=${project.version}" />
+    <xs:attribute name="app-view-blogs-xml-version" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-blogs+xml; version=${project.version}" />
+    <xs:attribute name="app-view-post-xml-version" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-post+xml; version=${project.version}" />
+    <xs:attribute name="app-view-posts-xml-version" type="xs:string"
+      fixed="application/vnd.${project.parent.artifactId}.view-posts+xml; version=${project.version}" />
+
+  </xs:complexType>
+
+  <xs:element name="blog">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="title" type="xs:string" />
+        <xs:element name="content" type="xs:string" />
+        <xs:element name="link" type="tns:link" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="post">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="title" type="xs:string" />
+        <xs:element name="content" type="xs:string" />
+        <xs:element name="link" type="tns:link" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="verb">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="get" />
+      <xs:enumeration value="post" />
+      <xs:enumeration value="put" />
+      <xs:enumeration value="delete" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="link">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string" />
+      <xs:element name="verb" type="tns:verb" />
+      <xs:element name="mediatype" type="xs:string" /> <!-- should be enum of mts -->
+      <xs:element name="url" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="view-root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="link" type="tns:link" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="view-blog">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tns:blog" />
+        <xs:element name="link" type="tns:link" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="view-blogs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tns:view-blog" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="link" type="tns:link" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="view-post">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tns:post" />
+        <xs:element name="link" type="tns:link" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="view-posts">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tns:view-post" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="link" type="tns:link" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

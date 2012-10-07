@@ -1,0 +1,80 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>se.lingonskogen.restblog</groupId>
+    <artifactId>restblog</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>se.lingonskogen.restblog</groupId>
+  <artifactId>restblog-mediatypes</artifactId>
+  <version>2.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>restblog-mediatypes</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>${project.build.directory}/filtered-sources</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>${project.build.directory}/generated-sources/xjc</directory>
+        <filtering>true</filtering>
+        <targetPath>${project.build.directory}/filtered-sources</targetPath>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/renamed-schemas</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <schemaDirectory>src/main/schemas</schemaDirectory>
+          <addCompileSourceRoot>false</addCompileSourceRoot>
+          <extension>true</extension>
+          <generatePackage>se.lingonskogen.restblog.mediatypes</generatePackage>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <configuration>
+              <target>
+                <copy file="${basedir}/src/main/schemas/restblog-mediatypes.xsd"
+                      toFile="${project.build.directory}/renamed-schemas/schemas/restblog-mediatypes-${project.version}.xsd"/>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
