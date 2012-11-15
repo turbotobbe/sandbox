@@ -1,0 +1,57 @@
+package se.sandbox.restdemo.generic;
+
+import java.io.Serializable;
+
+public class Prop implements Serializable
+{
+    private static final long serialVersionUID = 1L;
+
+    private String label;
+    
+    private String id;
+    
+    private String type;
+    
+    private String value;
+
+    public String getLabel()
+    {
+        return label;
+    }
+
+    public void setLabel(String label)
+    {
+        this.label = label;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public String getValue()
+    {
+        return value;
+    }
+
+    public void setValue(String value)
+    {
+        this.value = value;
+    }
+    
+}
