@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>se.lingonskogen</groupId>
+    <groupId>se.lingonskogen.sandbox</groupId>
     <artifactId>config</artifactId>
     <version>1.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>se.lingonskogen</groupId>
+  <groupId>se.lingonskogen.sandbox</groupId>
   <artifactId>config-client</artifactId>
   <version>1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -18,7 +18,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>se.lingonskogen</groupId>
+      <groupId>se.lingonskogen.sandbox</groupId>
       <artifactId>config-common</artifactId>
     </dependency>
     <dependency>

@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>se.lingonskogen.restblog</groupId>
+    <groupId>se.lingonskogen.sandbox</groupId>
     <artifactId>restblog</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>se.lingonskogen.restblog</groupId>
+  <groupId>se.lingonskogen.sandbox</groupId>
   <artifactId>restblog-webapp</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
@@ -22,17 +22,17 @@
 
   <dependencies>
     <dependency>
-      <groupId>se.lingonskogen.restblog</groupId>
+      <groupId>se.lingonskogen.sandbox</groupId>
       <artifactId>restblog-domain</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>se.lingonskogen.restblog</groupId>
+      <groupId>se.lingonskogen.sandbox</groupId>
       <artifactId>restblog-common</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>se.lingonskogen.restblog</groupId>
+      <groupId>se.lingonskogen.sandbox</groupId>
       <artifactId>restblog-mediatypes-all</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>

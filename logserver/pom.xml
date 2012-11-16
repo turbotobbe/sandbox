@@ -3,18 +3,12 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>se.lingonskogen.sandbox</groupId>
-    <artifactId>restblog</artifactId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
-
   <groupId>se.lingonskogen.sandbox</groupId>
-  <artifactId>restblog-client</artifactId>
+  <artifactId>logserver</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
-  <name>restblog-client</name>
+  <name>logserver</name>
 
   <properties>
     <jersey.version>1.13</jersey.version>
@@ -22,18 +16,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>se.lingonskogen.sandbox</groupId>
-      <artifactId>restblog-common</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>se.lingonskogen.sandbox</groupId>
-      <artifactId>restblog-mediatypes</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-server</artifactId>
+      <version>${jersey.version}</version>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-client</artifactId>
+      <artifactId>jersey-servlet</artifactId>
       <version>${jersey.version}</version>
     </dependency>
     <dependency>
@@ -48,5 +37,15 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <version>6.1.10</version>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
