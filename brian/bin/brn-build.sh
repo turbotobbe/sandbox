@@ -26,8 +26,8 @@ function build() {
 	echo "Dates:  (csv) ${DIR}/dates.csv"
 	ls ${DIR_QUOTES} | egrep "[0-9]+-[0-9]+-[0-9]+" > ${DIR}/dates.csv
 
-	local PAD=""
 	echo "Dates: (json) ${DIR}/dates.json"
+	local PAD=""
 	echo -n "{\"dates\":[" > ${DIR}/dates.json
 	while read LINE; do
 	    echo "$PAD" >> ${DIR}/dates.json
@@ -38,24 +38,17 @@ function build() {
 
         # quotes
 	echo "Build: (json) ${DIR_QUOTES}/${DATE}"
-	while read KEY_AND_NAME; do
-    	    local KEY=`echo $KEY_AND_NAME | cut -d ',' -f 1`
+	for KEY in `cat ${DIR}/names.csv | cut -d ',' -f 1`; do
+	    #echo "Build: (json) ${DIR_QUOTES}/${DATE}/${KEY}.json"
     	    local PAD=""
     	    echo -n "{\"quotes\":[" > ${DIR_QUOTES}/${DATE}/${KEY}.json
-    	    while read LINE; do
-    		local FETCH_DATE=`echo $LINE | cut -d ',' -f 1`
-    		local FETCH_TIME=`echo $LINE | cut -d ',' -f 2`
-    		local TIME=`echo $LINE | cut -d ',' -f 3`
-    		local VOLUME=`echo $LINE | cut -d ',' -f 4`
-    		local LATEST=`echo $LINE | cut -d ',' -f 5`
-    		local BUY=`echo $LINE | cut -d ',' -f 6`
-    		local SELL=`echo $LINE | cut -d ',' -f 7`
+	    for LINE in `cat ${DIR_QUOTES}/${DATE}/${KEY}.csv`; do
     		echo "$PAD" >> ${DIR_QUOTES}/${DATE}/${KEY}.json
-    		echo -n "  {\"fetch_date\":\"$FETCH_DATE\",\"fetch_time\":\"$FETCH_TIME\",\"time\":\"$TIME\",\"volume\":\"$VOLUME\",\"latest\":\"$LATEST\",\"buy\":\"$BUY\",\"sell\":\"$SELL\"}" >> ${DIR_QUOTES}/${DATE}/${KEY}.json
+    		echo -n "{$LINE}" >> ${DIR_QUOTES}/${DATE}/${KEY}.json
     		PAD=","
-    	    done < ${DIR_QUOTES}/${DATE}/${KEY}.csv
+    	    done
     	    echo "]}" >> ${DIR_QUOTES}/${DATE}/${KEY}.json
-	done < ${DIR}/names.csv
+	done
     fi
 }
 

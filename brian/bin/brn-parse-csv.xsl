@@ -16,10 +16,10 @@
   </xsl:template>
 
   <!--
-      fetch.stamp fetch.date time volume latest buy sell
+      fetch.stamp fetch.date time volume latest buy sell key
   -->
 <xsl:template match="tr">
-  <xsl:value-of select="$fetch.date" />,<xsl:value-of select="$fetch.time" />,<xsl:value-of select="td[position()=11]" />,<xsl:value-of select="td[position()=9]" />,<xsl:value-of select="td[position()=4]" />,<xsl:value-of select="td[position()=5]" />,<xsl:value-of select="td[position()=6]" />,<xsl:value-of select="translate(td[position()=1],' .åäöABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ','--aaoabcdefghijklmnopqrstuvwxyzaao')" /><xsl:text>
+  "fetch-date":"<xsl:value-of select="$fetch.date" />","fetch-time":"<xsl:value-of select="$fetch.time" />","time":"<xsl:value-of select="td[position()=11]" />","volume":"<xsl:value-of select="td[position()=9]" />","latest":"<xsl:value-of select="td[position()=4]" />","buy":"<xsl:value-of select="td[position()=5]" />","sell":"<xsl:value-of select="td[position()=6]" />","key":"<xsl:value-of select="translate(td[position()=1],' .åäöABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ','--aaoabcdefghijklmnopqrstuvwxyzaao')" />"<xsl:text>
 </xsl:text>
 </xsl:template>
 

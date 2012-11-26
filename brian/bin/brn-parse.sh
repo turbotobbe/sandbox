@@ -20,11 +20,13 @@ function parse() {
     echo "Parse: ${FILE_HTML}"
     mkdir -p ${DIR_QUOTES}/${DATE}
     for LINE in `/usr/bin/xsltproc --html --stringparam fetch.date ${DATE} --stringparam fetch.time ${TIME_MOD} ${DIR_BIN}/brn-parse-csv.xsl ${FILE_HTML}`; do
-	local KEY=`echo ${LINE} | cut -d',' -f 8`
-	echo ${LINE} | cut -d',' -f 1-7 >> ${DIR_QUOTES}/${DATE}/${KEY}.csv
+	local KEY=`echo ${LINE} | cut -d ',' -f 8 | sed 's/"key":"//g' | sed 's/"//g'`
+	echo ${LINE} | cut -d ',' -f 1-7 >> ${DIR_QUOTES}/${DATE}/${KEY}.csv
     done
 }
 
 parse ${DIR_LC_SAMPLES}/${DATE}/${TIME}.html ${DIR_LC_QUOTES}
 parse ${DIR_MC_SAMPLES}/${DATE}/${TIME}.html ${DIR_MC_QUOTES}
 parse ${DIR_SC_SAMPLES}/${DATE}/${TIME}.html ${DIR_SC_QUOTES}
+
+${DIR_BIN}/brn-build.sh
