@@ -1,15 +1,11 @@
 #!/bin/bash
 
 DIR_BIN=`dirname $0`
-DIR_WWW=/home/tobbe/www/brian
+DIR_WWW=/home/tobbe/www/brian/data
 
 DIR_LC_SAMPLES=${DIR_WWW}/large-cap/samples
 DIR_MC_SAMPLES=${DIR_WWW}/mid-cap/samples
 DIR_SC_SAMPLES=${DIR_WWW}/small-cap/samples
-
-#DIR_LC_QUOTES=${DIR_WWW}/large-cap/quotes
-#DIR_MC_QUOTES=${DIR_WWW}/mid-cap/quotes
-#DIR_SC_QUOTES=${DIR_WWW}/small-cap/quotes
 
 URL_LC="http://ir.svenskborsinfo.se/sbiir/tidningar/nordiclist/sharelist.page?magic=%28cc%20%28list%20sselarge%29%29"
 URL_MC="http://ir.svenskborsinfo.se/sbiir/tidningar/nordiclist/sharelist.page?magic=%28cc%20%28list%20norlistSEEMid%29%29"

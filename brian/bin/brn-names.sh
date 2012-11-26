@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR_BIN=`dirname $0`
-DIR_WWW=/home/tobbe/www/brian
+DIR_WWW=/home/tobbe/www/brian/data
 
 DIR_LC=${DIR_WWW}/large-cap
 DIR_MC=${DIR_WWW}/mid-cap
@@ -17,7 +17,7 @@ function names() {
     if [ ! -s ${DIR}/names.csv ]; then
 	echo "Names:  (csv) ${DIR}/names.csv"
 	echo -n "" > /tmp/brn-names.csv
-	for FILE in `find ${DIR} -name *.html`; do
+	for FILE in `find ${DIR} -name "*.html"`; do
 	    /usr/bin/xsltproc --html ${DIR_BIN}/brn-names-csv.xsl ${FILE} >> /tmp/brn-names.csv
 	done
 	cat /tmp/brn-names.csv | sort | uniq > ${DIR}/names.csv

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR_BIN=`dirname $0`
-DIR_WWW=/home/tobbe/www/brian
+DIR_WWW=/home/tobbe/www/brian/data
 
 DIR_LC=${DIR_WWW}/large-cap
 DIR_MC=${DIR_WWW}/mid-cap

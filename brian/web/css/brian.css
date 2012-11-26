@@ -1,0 +1,9 @@
+td {
+    vertical-align:top;
+}
+a {
+    white-space:nowrap;
+}
+.selected {
+    font-weight: bold
+}
