@@ -58,7 +58,7 @@ function names() {
     fi
     echo -n "" >> /tmp/brn-names.csv
     for FILE_HTML in `find ${DIR_SAMPLE} -name "*.html"`; do
-	/usr/bin/xsltproc --html ${DIR_BIN}/brn-names-csv.xsl ${FILE_HTML} >> /tmp/brn-names.csv
+	/usr/bin/xsltproc --html ${DIR_BIN}/brn-build-csv.xsl ${FILE_HTML} >> /tmp/brn-names.csv
     done
     cat /tmp/brn-names.csv | sort | uniq > ${DIR_TARGET}/names.csv
     rm /tmp/brn-names.csv

@@ -148,7 +148,6 @@ function reload() {
 	var sell = [];
 	for (var i = 0; i < data.quotes.length; i++) {
 	    var date = makeDate(data.date, data.quotes[i].atime);
-	    console.log(date.getTime());
 	    volume.push([date.getTime(), (data.quotes[i].volume * 1)]);
 	    buy.push([date.getTime(), (data.quotes[i].buy * 1)]);
 	    sell.push([date.getTime(), (data.quotes[i].sell * 1)]);
@@ -156,7 +155,6 @@ function reload() {
 	quotes['volume'] = volume;
 	quotes['buy'] = buy;
 	quotes['sell'] = sell;
-	console.log(quotes);
 	plot(quotes);
     })
 	.error(function(data){console.log("error: " + JSON.stringify(data));});
