@@ -5,5 +5,9 @@ a {
     white-space:nowrap;
 }
 .selected {
-    font-weight: bold
+    font-weight: bold;
+}
+
+.tickLabel {
+    width: 100px;
 }
