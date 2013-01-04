@@ -1,7 +1,8 @@
 var meta = {
     capKey: "",
     labelId: "",
-    canvasId: "",
+    quotesId: "",
+    volumeId: "",
     datesId: "",
     namesId: ""
 }
@@ -10,29 +11,23 @@ var stored = {
     nameStr: "",
     dateKey: ""
 }
-/*
-    var nameKey = "";
-    var nameStr = "";
-    var dateKey = makeDateKey(new Date());
-    var quotes = [];
-    var predicts = [];
-*/
 
-/* setters */
+/* setup */
 
-function init(capKey, labelId, canvasId, datesId, namesId) {
+function init(capKey, labelId, quotesId, volumeId, datesId, namesId) {
     meta.capKey = capKey;
     meta.labelId = labelId;
-    meta.canvasId = canvasId;
+    meta.quotesId = quotesId;
+    meta.volumeId = volumeId;
     meta.datesId = datesId;
     meta.namesId = namesId;
     s = sessionStorage[capKey + "-stored"];
     if (s == null) {
-	nowKey = makeDateKey(new Date());
+	//nowKey = makeDateKey(new Date());
 	stored = {
 	    nameKey: "",
 	    nameStr: "",
-	    dateKey: nowKey
+	    dateKey: ""
 	}
     } else {
 	stored = JSON.parse(s);
@@ -40,7 +35,6 @@ function init(capKey, labelId, canvasId, datesId, namesId) {
     //$("#log").html("stored:" + JSON.stringify(stored));
     loadDates();
     loadNames();
-    reload();
 }
 
 function updateStore() {
@@ -53,30 +47,21 @@ function updateStore() {
 function loadDates() {
     console.log("Loading " + meta.capKey + " dates ... ");
     $.getJSON("data/" + meta.capKey + "/dates.json", function(data){
-	var nowKey = makeDateKey(new Date());
-	var div = '<div>';
-	div += '<a id="' + nowKey + '" href="#">Today</a>';
-	div += '</div>';
-	$('#' + meta.datesId).append(div);
-	$("a#" + nowKey).click(function(event){
-	    event.preventDefault();
-	    stored.dateKey = this.id;
-	    updateStore();
-	    reload();
-	});
+	if (stored.dateKey == "" && data.dates.length > 0)
+	{
+	    stored.dateKey = data.dates[0];
+	}
 	for (var i = 0; i < data.dates.length; i++){
-	    if (data.dates[i] != nowKey) {
-		var div = '<div>';
-		div += '<a id="' + data.dates[i]+ '" href="#">' + data.dates[i] + '</a>';
-		div += '</div>';
-		$('#' + meta.datesId).append(div);
-		$("a#" + data.dates[i]).click(function(event){
-		    event.preventDefault();
-		    stored.dateKey = this.id;
-		    updateStore();
-		    reload();
-		});
-	    }
+	    var div = '<div>';
+	    div += '<a id="' + data.dates[i]+ '" href="#">' + data.dates[i] + '</a>';
+	    div += '</div>';
+	    $('#' + meta.datesId).append(div);
+	    $("a#" + data.dates[i]).click(function(event){
+		event.preventDefault();
+		stored.dateKey = this.id;
+		updateStore();
+		reload();
+	    });
 	}
 	reload();
     })
@@ -88,6 +73,11 @@ function loadDates() {
 function loadNames() {
     console.log("Loading " + meta.capKey + " names ... ");
     $.getJSON("data/" + meta.capKey + "/names.json", function(data){
+	if (stored.nameKey == "" && data.names.length > 0)
+	{
+	    stored.nameKey = data.names[0].key;
+	    stored.nameStr = data.names[0].name;
+	}
 	for (var i = 0; i < data.names.length; i++){
 	    var key = data.names[i].key;
 	    var div = '';
@@ -152,52 +142,52 @@ function reload() {
     if (stored.dateKey == "" || stored.nameKey == "") {
 	return;
     }
-    var quotes = [];
+    var values = [];
     console.log("Loading " + meta.capKey + " quotes ...");
     $.getJSON("data/" + meta.capKey + '/quotes/' + stored.dateKey + '/' + stored.nameKey + '.json', function(data){
+	var latest = [];
 	var volume = [];
-	var buy = [];
-	var sell = [];
+	var beg = makeDate(data.date, "09:15").getTime();
+	var end = makeDate(data.date, "17:45").getTime();
+	var off = (15*60*1000)
 	for (var i = 0; i < data.quotes.length; i++) {
-	    var date = makeDate(data.quotes[i].fetch_date, data.quotes[i].fetch_time);
-	    console.log(date.getTime());
-	    volume.push([date.getTime(), (data.quotes[i].volume * 1)]);
-	    buy.push([date.getTime(), (data.quotes[i].buy * 1)]);
-	    sell.push([date.getTime(), (data.quotes[i].sell * 1)]);
+	    var date = makeDate(data.date, data.quotes[i].btime);
+	    if (date > beg && date <= end) {
+		latest.push([date.getTime(), (data.quotes[i].latest * 1)]);
+		volume.push([date.getTime(), (data.quotes[i].volume * 1)]);
+	    }
 	}
-	quotes['volume'] = volume;
-	quotes['buy'] = buy;
-	quotes['sell'] = sell;
-	console.log(quotes);
-	plot(quotes);
+	values['latest'] = latest;
+	values['volume'] = volume;
+	plot(values);
     })
 	.error(function(data){console.log("error: " + JSON.stringify(data));});
 }
 
-function plot(quotes) {
-    if (quotes == null) {
+function plot(values) {
+    if (values == null) {
 	$("#" + meta.labelId).html("");
-	$.plot($("#" + meta.canvasId), []);
+	$.plot($("#" + meta.quotesId), []);
+	$.plot($("#" + meta.volumeId), []);
 	return;
     }
     console.log("plotting ...");
     $("#" + meta.labelId).html(stored.nameStr + " (" + stored.dateKey + ")");
-    var data = [];
-    data.push({ label: "Sell", color: "green", data: quotes['sell'] });
-    data.push({ label: "Buy", color: "blue", data: quotes['buy'] });
-/*
-    for (var i = 0; i < predicts.length; i++) {
-	if (i == 0) {
-	    data.push({ label: "Predict", color: "red", data: predicts[i] });
-	} else {
-	    data.push({ color: "red", data: predicts[i] });
-	}
-    }
-*/
-    $.plot($("#" + meta.canvasId), data, {
+    var latestData = [];
+    latestData.push({ label: "Latest", color: "blue", data: values['latest'] });
+    $.plot($("#" + meta.quotesId), latestData, {
 	series: {
 	    lines: { show: true },
 	    points: { show: false }
+	},
+	xaxis: { mode: "time" }
+    });
+    var volumeData = [];
+    volumeData.push({ label: "Volume", color: "blue", data: values['volume'] });
+    $.plot($("#" + meta.volumeId), volumeData, {
+    	series: {
+    	    lines: { show: true },
+    	    points: { show: false }
 	},
 	xaxis: { mode: "time" }
     });

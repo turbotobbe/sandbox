@@ -1,5 +1,6 @@
 #!/bin/bash
 
+APP_NAME=`basename $0`
 DIR_BIN=`dirname $0`
 DIR_WWW=/home/tobbe/www/brian/data
 
@@ -7,62 +8,53 @@ DIR_LC=${DIR_WWW}/large-cap
 DIR_MC=${DIR_WWW}/mid-cap
 DIR_SC=${DIR_WWW}/small-cap
 
-DIR_LC_QUOTES=${DIR_WWW}/large-cap/quotes
-DIR_MC_QUOTES=${DIR_WWW}/mid-cap/quotes
-DIR_SC_QUOTES=${DIR_WWW}/small-cap/quotes
+DIR_LC_QUOTES=${DIR_LC}/quotes
+DIR_MC_QUOTES=${DIR_MC}/quotes
+DIR_SC_QUOTES=${DIR_SC}/quotes
 
-function build() {
-    local DIR=$1
-    local DIR_QUOTES=$2
-    local DATE=$3
+NOW_DATE=`date +%Y-%m-%d`
 
-    ${DIR_BIN}/brn-names.sh
+DIR_CSV_LC=${DIR_LC_QUOTES}/${NOW_DATE}
+DIR_CSV_MC=${DIR_MC_QUOTES}/${NOW_DATE}
+DIR_CSV_SC=${DIR_SC_QUOTES}/${NOW_DATE}
 
-    if [ -s ${DIR}/names.csv ]; then
-
-	mkdir -p ${DIR_QUOTES}
-
-        # dates
-	echo "Dates:  (csv) ${DIR}/dates.csv"
-	ls ${DIR_QUOTES} | egrep "[0-9]+-[0-9]+-[0-9]+" > ${DIR}/dates.csv
-
-	echo "Dates: (json) ${DIR}/dates.json"
-	local PAD=""
-	echo -n "{\"dates\":[" > ${DIR}/dates.json
-	while read LINE; do
-	    echo "$PAD" >> ${DIR}/dates.json
-	    echo -n "  \"$LINE\"" >> ${DIR}/dates.json
-	    PAD=","
-	done < ${DIR}/dates.csv
-	echo "]}" >> ${DIR}/dates.json
-
-        # quotes
-	echo "Build: (json) ${DIR_QUOTES}/${DATE}"
-	for KEY in `cat ${DIR}/names.csv | cut -d ',' -f 1`; do
-	    #echo "Build: (json) ${DIR_QUOTES}/${DATE}/${KEY}.json"
-    	    local PAD=""
-    	    echo -n "{\"quotes\":[" > ${DIR_QUOTES}/${DATE}/${KEY}.json
-	    for LINE in `cat ${DIR_QUOTES}/${DATE}/${KEY}.csv`; do
-    		echo "$PAD" >> ${DIR_QUOTES}/${DATE}/${KEY}.json
-    		echo -n "{$LINE}" >> ${DIR_QUOTES}/${DATE}/${KEY}.json
-    		PAD=","
-    	    done
-    	    echo "]}" >> ${DIR_QUOTES}/${DATE}/${KEY}.json
-	done
-    fi
+function msg() {
+    local STAMP=`date "+%Y-%m-%d %H:%M:%S"`
+    echo "[${APP_NAME} @ ${STAMP}] $1"
 }
 
-if [ $# == 0 ]; then
-    DATE=`date +%Y-%m-%d`
-    build ${DIR_LC} ${DIR_LC_QUOTES} ${DATE}
-    build ${DIR_MC} ${DIR_MC_QUOTES} ${DATE}
-    build ${DIR_SC} ${DIR_SC_QUOTES} ${DATE}
-else
-    while [ "$1" ]; do
-	DATE=$1
-	build ${DIR_LC} ${DIR_LC_QUOTES} ${DATE}
-	build ${DIR_MC} ${DIR_MC_QUOTES} ${DATE}
-	build ${DIR_SC} ${DIR_SC_QUOTES} ${DATE}
-	shift
+function build() {
+    local DIR_CSV=$1
+    if [ ! -d ${DIR_CSV} ]; then
+	msg "Dates: Not Found! ${DIR_CSV}"
+	return
+    else
+	msg "Build: ${DIR_CSV}"
+    fi
+    for FILE_CSV in `ls ${DIR_CSV} | grep csv`; do
+	local FILE_JSON=`echo ${FILE_CSV} | sed 's/csv/json/g'`
+	echo -n "{\"date\":\"${NOW_DATE}\"," > ${DIR_CSV}/${FILE_JSON}
+	echo -n "\"quotes\":[" >> ${DIR_CSV}/${FILE_JSON}
+	PAD=""
+	while read LINE; do
+	    ATIME=${LINE%%,*}
+	    LINE=${LINE#*,}
+	    BTIME=${LINE%%,*}
+	    LINE=${LINE#*,}
+	    VOLUME=${LINE%%,*}
+	    LINE=${LINE#*,}
+	    LATEST=${LINE%%,*}
+	    LINE=${LINE#*,}
+	    BUY=${LINE%%,*}
+	    LINE=${LINE#*,}
+	    SELL=${LINE%%,*}
+	    echo -n "${PAD}{\"atime\":\"${ATIME}\",\"btime\":\"${BTIME}\",\"volume\":\"${VOLUME}\",\"latest\":\"${LATEST}\",\"buy\":\"${BUY}\",\"sell\":\"${SELL}\"}" >> ${DIR_CSV}/${FILE_JSON}
+	    PAD=","
+	done < ${DIR_CSV}/${FILE_CSV}
+	echo -n "]}" >> ${DIR_CSV}/${FILE_JSON}
     done
-fi
+}
+
+build ${DIR_CSV_LC}
+build ${DIR_CSV_MC}
+build ${DIR_CSV_SC}

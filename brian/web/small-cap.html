@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Brian</title>
+  <title>Brian - Small Caps</title>
   <link href="css/layout.css" rel="stylesheet" type="text/css">
   <link href="css/brian.css" rel="stylesheet" type="text/css">
   <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
@@ -14,14 +14,14 @@
 
   <h1>Brian</h1>
   <p>
-    <a href="large-cap.html" id="large-cap">Large</a> | <a href="mid-cap.html" id="mid-cap">Mid</a> | <a href="small-cap.html" id="small-cap">Small</a>
+    <a href="large-cap.html" id="large-cap">Large</a> | <a href="mid-cap.html" id="mid-cap">Mid</a> | <a href="small-cap.html" id="small-cap">Small</a> | <a href="data">Data</a>
   </p>
   <p id="log"></p>
   <hr />
   <table>
     <tr>
       <td>
-	<h2>Caps - Small</h2>
+	<h2>Small Caps</h2>
 	<div id="names"></div>
       </td>
       <td>
@@ -32,13 +32,16 @@
     <tr>
       <td colspan="2">
 	<h1 id="label"></h1>
-	<div id="canvas" style="width:1200px;height:300px;"></div>
+	<h3>Latest</h3>
+	<div id="quotes" style="width:1200px;height:600px;"></div>
+	<h3>Volume</h3>
+	<div id="volume" style="width:1200px;height:300px;"></div>
       </td>
     </tr>
   </table>
   <script type="text/javascript">
     console.log("loading page ...");
-    init("small-cap", "label", "canvas", "dates", "names");
+    init("small-cap", "label", "quotes", "volume", "dates", "names");
   </script>
 </body>
 </html>
