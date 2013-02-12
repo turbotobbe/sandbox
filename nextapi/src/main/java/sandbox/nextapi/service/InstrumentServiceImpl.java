@@ -51,8 +51,28 @@ public class InstrumentServiceImpl extends AbstractService implements Instrument
 
 	@Override
 	public List<Tick> getChart(String marketId, String identifier) {
-		// TODO Auto-generated method stub
-		return null;
+        LOG.fine("enter!");
+        WebResource resource = base.path("chart_data");
+        resource = addParam(resource, "marketID", marketId);
+        resource = addParam(resource, "identifier", identifier);
+        JSONArray resp = resource.accept(JSON).get(JSONArray.class);
+        List<Tick> list = new ArrayList<Tick>();
+        try {
+            LOG.info(resp.toString(2));
+            for (int i = 0; i < resp.length(); i++) {
+                JSONObject json = resp.getJSONObject(i);
+                Tick t = new Tick();
+                t.setTimestamp(json.getString("timestamp"));
+                t.setPrice(json.getDouble("price"));
+                t.setVolume(json.getInt("volume"));
+                t.setChange(json.getDouble("change"));
+                list.add(t);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new RuntimeException("json trouble", e);
+        }
+        return list;
 	}
 
 	@Override

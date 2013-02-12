@@ -1,5 +1,7 @@
 package sandbox.nextapi.service;
 
+import java.io.PrintStream;
+
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.client.WebResource;
@@ -20,5 +22,4 @@ public class AbstractService {
 		}
 		return resource;
 	}
-
 }

@@ -4,11 +4,11 @@ public class Tick {
 	
 	private String timestamp;
 	
-	private Float change;
+	private Double change;
 	
 	private Integer volume;
 	
-	private Float price;
+	private Double price;
 
 	public String getTimestamp() {
 		return timestamp;
@@ -18,11 +18,11 @@ public class Tick {
 		this.timestamp = timestamp;
 	}
 
-	public Float getChange() {
+	public Double getChange() {
 		return change;
 	}
 
-	public void setChange(Float change) {
+	public void setChange(Double change) {
 		this.change = change;
 	}
 
@@ -34,11 +34,11 @@ public class Tick {
 		this.volume = volume;
 	}
 
-	public Float getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Float price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 	
